@@ -21,9 +21,7 @@ export class FuncionariosController {
 
             return rep.status(201).send(funcionario)
         } catch (err: any) {
-            return rep.status(err.statusCode).send(err.message)
-
-            throw new AppError(err.message, err.statusCode) // não está fazendo o catch do error
+            throw new AppError(err.message, err.statusCode) 
         }
     }
 }
