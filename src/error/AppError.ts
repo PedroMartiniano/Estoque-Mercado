@@ -1,6 +1,6 @@
 export class AppError {
-    constructor(public readonly message: string = 'Something went wrong', public readonly status: number = 400) {
+    constructor(public readonly message: string = 'Something went wrong', public readonly statusCode: number = 400) {
         this.message = message
-        this.status = status
+        this.statusCode = statusCode
     }
 }

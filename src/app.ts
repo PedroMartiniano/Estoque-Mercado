@@ -35,6 +35,6 @@ app.register(fastifyJwt, {
 
 app.register(routes)
 
-app.setErrorHandler(errorHandler)
+app.setErrorHandler(errorHandler) // não está dando catch no erro
 
 export default app

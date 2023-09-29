@@ -13,4 +13,4 @@ const knexConfig: Knex.Config = {
 
 const knexInstance = knex(knexConfig)
 
-export { knexInstance }
+export default knexInstance
