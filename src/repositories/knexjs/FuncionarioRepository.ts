@@ -11,7 +11,7 @@ export class KnexFuncionarioRepository implements FuncionariosRepository {
         try {
             const id = uuid()
 
-            const res = await knex.transaction(async (trx) => {
+            const res: FuncionarioProps = await knex.transaction(async (trx) => {
                 await trx
                     .insert({
                         id,
@@ -48,5 +48,39 @@ export class KnexFuncionarioRepository implements FuncionariosRepository {
             return null
         }
     }
-    
+
+    async getFuncionarioByCpf(cpf: string): Promise<FuncionarioProps | null> {
+        try {
+            const funcionario: FuncionarioProps[] = await knex
+                .select()
+                .from('funcionarios')
+                .where({ cpf })
+
+            return funcionario[0]
+        } catch {
+            return null
+        }
+    }
+
+    async updateFuncionario(data: FuncionarioProps): Promise<FuncionarioProps | null> {
+        try {
+            const { id, nome, sobrenome, cargo, cpf, status_func } = data
+
+            const res = await knex
+                .update({
+                    nome,
+                    sobrenome,
+                    cargo,
+                    cpf,
+                    status_func
+                })
+                .where({ id })
+
+            return res
+        } catch {
+            return null
+        }
+    }
+
 }
+
