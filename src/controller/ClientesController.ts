@@ -23,4 +23,52 @@ export class ClientesController {
             throw new AppError(e.message, e.statusCode)
         }
     }
+
+    async getClienteByIdHandler(req: FastifyRequest, rep: FastifyReply) {
+        const idSchema = z.object({
+            id: z.string()
+        })
+
+        const { id } = idSchema.parse(req.params)
+
+        const clientesService = makeClientesService()
+
+        try {
+            const cliente = await clientesService.getClienteByIdExecute(id)
+
+            if (!cliente) {
+                return rep.status(400).send({ success: false, message: "Cliente not found!" })
+            }
+
+            return rep.status(200).send({ success: true, data: cliente })
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
+    }
+
+    async updateClienteHandler(req: FastifyRequest, rep: FastifyReply) {
+        const clienteSchema = z.object({
+            nome: z.string(),
+            sobrenome: z.string(),
+            cpf: z.string(),
+            status_cliente: z.number()
+        })
+
+        const idSchema = z.object({
+            id: z.string()
+        })
+
+        const { nome, sobrenome, cpf, status_cliente } = clienteSchema.parse(req.body)
+        const { id } = idSchema.parse(req.params)
+
+        const clientesService = makeClientesService()
+
+        try {
+            const cliente = await clientesService.updateClienteExecute({ id, nome, sobrenome, cpf, status_cliente })
+
+            return rep.status(200).send({ success: true, data: cliente })
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
+    }
 }

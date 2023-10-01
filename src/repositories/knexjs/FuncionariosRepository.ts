@@ -77,7 +77,7 @@ export class KnexFuncionariosRepository implements FuncionariosRepository {
                     .from('funcionarios')
                     .where({ id })
 
-                const funcionario = await trx
+                const funcionario: FuncionarioProps[] = await trx
                     .select()
                     .from('funcionarios')
                     .where({ id })
@@ -99,7 +99,7 @@ export class KnexFuncionariosRepository implements FuncionariosRepository {
                     .from('funcionarios')
                     .where({ id })
 
-                const funcionario = await trx
+                const funcionario: FuncionarioProps[] = await trx
                     .select()
                     .from('funcionarios')
                     .where({ id })

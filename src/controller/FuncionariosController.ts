@@ -38,7 +38,7 @@ export class FuncionariosController {
             const funcionario = await funcionarioService.getFuncionarioByIdExecute(id)
 
             if (!funcionario) {
-                return rep.status(400).send({ success: false, message: 'User not found!' })
+                return rep.status(400).send({ success: false, message: 'Funcionario not found!' })
             }
 
             return rep.status(200).send({ success: true, data: funcionario })
