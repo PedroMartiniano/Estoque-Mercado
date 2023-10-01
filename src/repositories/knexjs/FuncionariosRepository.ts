@@ -1,10 +1,9 @@
-import { CreateFuncionarioProps, FuncionarioProps } from "../../@types/Funcionario";
+import { CreateFuncionarioProps, FuncionarioProps } from "../../@types/Funcionarios";
 import { FuncionariosRepository } from "../interfaces/funcionarios-interfaces";
 import knex from '../../../database'
 import { v4 as uuid } from 'uuid'
 
-export class KnexFuncionarioRepository implements FuncionariosRepository {
-
+export class KnexFuncionariosRepository implements FuncionariosRepository {
     async createFuncionario(data: CreateFuncionarioProps): Promise<FuncionarioProps | null> {
         const { nome, sobrenome, cargo, cpf } = data
 
@@ -22,7 +21,7 @@ export class KnexFuncionarioRepository implements FuncionariosRepository {
                     })
                     .into('funcionarios')
 
-                const funcionario = await trx
+                const funcionario: FuncionarioProps[] = await trx
                     .select()
                     .from('funcionarios')
                     .where({ id })

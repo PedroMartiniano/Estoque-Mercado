@@ -1,8 +1,8 @@
-import { CreateFuncionarioProps, FuncionarioProps } from "../@types/Funcionario";
+import { CreateFuncionarioProps, FuncionarioProps } from "../@types/Funcionarios";
 import { AppError } from "../error/AppError";
 import { FuncionariosRepository } from "../repositories/interfaces/funcionarios-interfaces";
 
-export class FuncionarioService {
+export class FuncionariosService {
     constructor(private funcionariosRepository: FuncionariosRepository) { }
 
     async createFuncionarioExecute(data: CreateFuncionarioProps): Promise<FuncionarioProps | null> {

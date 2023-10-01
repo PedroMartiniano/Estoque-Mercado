@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
-import { makeFuncionarioService } from '../factory/makeFuncionarioService'
+import { makeFuncionariosService } from '../factory/makeFuncionariosService'
 import { AppError } from '../error/AppError'
 
 export class FuncionariosController {
@@ -14,7 +14,7 @@ export class FuncionariosController {
 
         const { nome, sobrenome, cargo, cpf } = funcionarioSchema.parse(req.body)
 
-        const funcionarioService = makeFuncionarioService()
+        const funcionarioService = makeFuncionariosService()
 
         try {
             const funcionario = await funcionarioService.createFuncionarioExecute({ nome, sobrenome, cargo, cpf })
@@ -32,7 +32,7 @@ export class FuncionariosController {
 
         const { id } = idSchema.parse(req.params)
 
-        const funcionarioService = makeFuncionarioService()
+        const funcionarioService = makeFuncionariosService()
 
         try {
             const funcionario = await funcionarioService.getFuncionarioByIdExecute(id)
@@ -64,7 +64,7 @@ export class FuncionariosController {
 
         const { id } = idSchema.parse(req.params)
 
-        const funcionarioService = makeFuncionarioService()
+        const funcionarioService = makeFuncionariosService()
         try {
             const funcionario = await funcionarioService.updateFuncionarioExecute({ id, nome, sobrenome, cargo, cpf, status_func })
 
@@ -81,7 +81,7 @@ export class FuncionariosController {
 
         const { id } = idSchema.parse(req.params)
 
-        const funcionarioService = makeFuncionarioService()
+        const funcionarioService = makeFuncionariosService()
 
         try {
             const funcionario = await funcionarioService.deleteFuncionarioExecute(id)
@@ -93,7 +93,7 @@ export class FuncionariosController {
     }
 
     async getAllFuncionariosHandler(req: FastifyRequest, rep: FastifyReply) {
-        const funcionarioService = makeFuncionarioService()
+        const funcionarioService = makeFuncionariosService()
 
         try {
             const funcionarios = await funcionarioService.getAllFuncionariosExecute()

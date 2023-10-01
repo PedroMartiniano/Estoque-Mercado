@@ -1,4 +1,4 @@
-import { CreateFuncionarioProps, FuncionarioProps } from "../../@types/Funcionario";
+import { CreateFuncionarioProps, FuncionarioProps } from "../../@types/Funcionarios";
 
 export interface FuncionariosRepository {
     createFuncionario(data: CreateFuncionarioProps): Promise<FuncionarioProps | null>
