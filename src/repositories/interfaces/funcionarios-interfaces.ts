@@ -5,4 +5,6 @@ export interface FuncionariosRepository {
     getFuncionarioById(id: string): Promise<FuncionarioProps | null>
     getFuncionarioByCpf(cpf: string): Promise<FuncionarioProps | null>
     updateFuncionario(data: FuncionarioProps): Promise<FuncionarioProps | null>
+    deleteFuncionario(id: string): Promise<FuncionarioProps | null>
+    getAllFuncionarios(): Promise<FuncionarioProps[] | null>
 }

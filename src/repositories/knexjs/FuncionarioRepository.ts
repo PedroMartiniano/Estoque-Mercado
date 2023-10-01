@@ -66,15 +66,25 @@ export class KnexFuncionarioRepository implements FuncionariosRepository {
         try {
             const { id, nome, sobrenome, cargo, cpf, status_func } = data
 
-            const res = await knex
-                .update({
-                    nome,
-                    sobrenome,
-                    cargo,
-                    cpf,
-                    status_func
-                })
-                .where({ id })
+            const res: FuncionarioProps = await knex.transaction(async (trx) => {
+                await trx
+                    .update({
+                        nome,
+                        sobrenome,
+                        cargo,
+                        cpf,
+                        status_func
+                    })
+                    .from('funcionarios')
+                    .where({ id })
+
+                const funcionario = await trx
+                    .select()
+                    .from('funcionarios')
+                    .where({ id })
+
+                return funcionario[0]
+            })
 
             return res
         } catch {
@@ -82,5 +92,38 @@ export class KnexFuncionarioRepository implements FuncionariosRepository {
         }
     }
 
+    async deleteFuncionario(id: string): Promise<FuncionarioProps | null> {
+        try {
+            const res: FuncionarioProps = await knex.transaction(async (trx) => {
+                await trx
+                    .update({ status_func: 0 })
+                    .from('funcionarios')
+                    .where({ id })
+
+                const funcionario = await trx
+                    .select()
+                    .from('funcionarios')
+                    .where({ id })
+
+                return funcionario[0]
+            })
+
+            return res
+        } catch {
+            return null
+        }
+    }
+
+    async getAllFuncionarios(): Promise<FuncionarioProps[] | null> {
+        try {
+            const funcionarios: FuncionarioProps[] = await knex
+                .select()
+                .from('funcionarios')
+
+            return funcionarios
+        } catch {
+            return null
+        }
+    }
 }
 

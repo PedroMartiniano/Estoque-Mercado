@@ -1,4 +1,4 @@
-import { FastifyRequest, FastifyReply, FastifyInstance } from 'fastify'
+import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
 import { makeFuncionarioService } from '../factory/makeFuncionarioService'
 import { AppError } from '../error/AppError'
@@ -8,7 +8,7 @@ export class FuncionariosController {
         const funcionarioSchema = z.object({
             nome: z.string(),
             sobrenome: z.string(),
-            cargo: z.string(),
+            cargo: z.enum(['FUNCIONARIO', 'GERENTE']),
             cpf: z.string().length(11)
         })
 
@@ -19,9 +19,9 @@ export class FuncionariosController {
         try {
             const funcionario = await funcionarioService.createFuncionarioExecute({ nome, sobrenome, cargo, cpf })
 
-            return rep.status(201).send(funcionario)
-        } catch (err: any) {
-            throw new AppError(err.message, err.statusCode)
+            return rep.status(201).send({ success: true, data: funcionario })
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
         }
     }
 
@@ -42,8 +42,65 @@ export class FuncionariosController {
             }
 
             return rep.status(200).send({ success: true, data: funcionario })
-        } catch {
-            throw new AppError('Error! Try again.', 500)
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
+    }
+
+    async updateFuncionarioHandler(req: FastifyRequest, rep: FastifyReply) {
+        const funcionarioSchema = z.object({
+            nome: z.string(),
+            sobrenome: z.string(),
+            cargo: z.enum(['FUNCIONARIO', 'GERENTE']),
+            cpf: z.string().length(11),
+            status_func: z.number()
+        })
+
+        const idSchema = z.object({
+            id: z.string()
+        })
+
+        const { nome, sobrenome, cargo, cpf, status_func } = funcionarioSchema.parse(req.body)
+
+        const { id } = idSchema.parse(req.params)
+
+        const funcionarioService = makeFuncionarioService()
+        try {
+            const funcionario = await funcionarioService.updateFuncionarioExecute({ id, nome, sobrenome, cargo, cpf, status_func })
+
+            return rep.status(200).send({ success: true, data: funcionario })
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
+    }
+
+    async deleteFuncionarioHandler(req: FastifyRequest, rep: FastifyReply) {
+        const idSchema = z.object({
+            id: z.string()
+        })
+
+        const { id } = idSchema.parse(req.params)
+
+        const funcionarioService = makeFuncionarioService()
+
+        try {
+            const funcionario = await funcionarioService.deleteFuncionarioExecute(id)
+
+            return rep.status(200).send({ success: false, data: funcionario })
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
+    }
+
+    async getAllFuncionariosHandler(req: FastifyRequest, rep: FastifyReply) {
+        const funcionarioService = makeFuncionarioService()
+
+        try {
+            const funcionarios = await funcionarioService.getAllFuncionariosExecute()
+
+            return rep.status(200).send({ success: true, data: funcionarios })
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
         }
     }
 }

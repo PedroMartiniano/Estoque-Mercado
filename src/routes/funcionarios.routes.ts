@@ -12,7 +12,15 @@ export const funcionariosRoutes = async (app: FastifyInstance) => {
         await funcionariosController.getFuncionarioByIdHandler(req, rep)
     })
 
-    app.put('/update/:id', (req, rep) => {
+    app.put('/update/:id', async (req, rep) => {
+        await funcionariosController.updateFuncionarioHandler(req, rep)
+    })
 
+    app.delete('/delete/:id', async (req, rep) => {
+        await funcionariosController.deleteFuncionarioHandler(req, rep)
+    })
+
+    app.get('/get-all', async (req, rep) => {
+        await funcionariosController.getAllFuncionariosHandler(req, rep)
     })
 }
