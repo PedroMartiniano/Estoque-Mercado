@@ -63,11 +63,11 @@ export class FuncionariosService {
         const funcionarioId = await this.funcionariosRepository.getFuncionarioById(id)
 
         if (!funcionarioId) {
-            throw new AppError('User not found!', 400)
+            throw new AppError('Funcionario not found!', 400)
         }
 
         if (funcionarioId.status_func === 0) {
-            throw new AppError('User already disabled', 400)
+            throw new AppError('Funcionario already disabled', 400)
         }
 
         const funcionario = await this.funcionariosRepository.deleteFuncionario(id)
@@ -79,7 +79,7 @@ export class FuncionariosService {
         return funcionario
     }
 
-    async getAllFuncionariosExecute(): Promise<FuncionarioProps[] | null> {
+    async getAllFuncionariosExecute(): Promise<FuncionarioProps[]> {
         const funcionarios = await this.funcionariosRepository.getAllFuncionarios()
 
         if (funcionarios === null) {

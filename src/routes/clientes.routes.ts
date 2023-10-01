@@ -15,4 +15,12 @@ export const clientesRoutes = async (app: FastifyInstance) => {
     app.put('/update/:id', async (req, rep) => {
         await clientesController.updateClienteHandler(req, rep)
     })
+
+    app.delete('/delete/:id', async (req, rep) => {
+        await clientesController.deleteClienteHandler(req, rep)
+    })
+
+    app.get('/get-all', async (req, rep) => {
+        await clientesController.getAllClientesHandler(req, rep)
+    })
 }

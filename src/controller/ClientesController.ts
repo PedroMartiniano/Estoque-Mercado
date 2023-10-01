@@ -71,4 +71,38 @@ export class ClientesController {
             throw new AppError(e.message, e.statusCode)
         }
     }
+
+    async deleteClienteHandler(req: FastifyRequest, rep: FastifyReply) {
+        const idSchema = z.object({
+            id: z.string()
+        })
+
+        const { id } = idSchema.parse(req.params)
+
+        const clientesService = makeClientesService()
+
+        try {
+            const cliente = await clientesService.deleteClienteExecute(id)
+
+            return rep.status(200).send({ success: true, data: cliente })
+        } catch (e: any) {
+            throw new AppError(e.message, e.StatusCode)
+        }
+    }
+
+    async getAllClientesHandler(req: FastifyRequest, rep: FastifyReply) {
+        const clientesService = makeClientesService()
+
+        try {
+            const clientes = await clientesService.getAllClientesExecute()
+
+            if (!clientes[0]) {
+                return rep.status(400).send({ success: false, message: 'None clientes founded!' })
+            }
+
+            return rep.status(200).send({ success: false, data: clientes })
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
+    }
 }

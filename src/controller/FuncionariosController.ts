@@ -98,6 +98,10 @@ export class FuncionariosController {
         try {
             const funcionarios = await funcionarioService.getAllFuncionariosExecute()
 
+            if (!funcionarios[0]) {
+                return rep.status(400).send({ success: false, message: 'None funcionarios founded!' })
+            }
+
             return rep.status(200).send({ success: true, data: funcionarios })
         } catch (e: any) {
             throw new AppError(e.message, e.statusCode)

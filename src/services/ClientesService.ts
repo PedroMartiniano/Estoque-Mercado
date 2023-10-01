@@ -58,4 +58,34 @@ export class ClientesService {
 
         return cliente
     }
+
+    async deleteClienteExecute(id: string): Promise<ClientesProps | null> {
+        const clienteId = await this.clientesRepository.getClienteById(id)
+
+        if (!clienteId) {
+            throw new AppError('Cliente not found!', 400)
+        }
+
+        if (clienteId.status_cliente === 0) {
+            throw new AppError('Cliente already disabled', 400)
+        }
+
+        const cliente = await this.clientesRepository.deleteCliente(id)
+
+        if (cliente === null) {
+            throw new AppError('Something went wrong deleting cliente', 500)
+        }
+
+        return cliente
+    }
+
+    async getAllClientesExecute(): Promise<ClientesProps[]> {
+        const clientes = await this.clientesRepository.getAllClientes()
+
+        if (clientes === null) {
+            throw new AppError('Error on geting clientes', 500)
+        }
+
+        return clientes
+    }
 }

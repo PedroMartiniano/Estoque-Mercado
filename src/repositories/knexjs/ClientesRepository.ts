@@ -88,4 +88,38 @@ export class KnexClientesRepository implements ClientesRepository {
             return null
         }
     }
+
+    async deleteCliente(id: string): Promise<ClientesProps | null> {
+        try {
+            const res: ClientesProps = await knex.transaction(async (trx) => {
+                await trx
+                    .update({ status_cliente: 0 })
+                    .from('clientes')
+                    .where({ id })
+
+                const cliente: ClientesProps[] = await trx
+                    .select()
+                    .from('clientes')
+                    .where({ id })
+
+                return cliente[0]
+            })
+
+            return res
+        } catch {
+            return null
+        }
+    }
+
+    async getAllClientes(): Promise<ClientesProps[] | null> {
+        try {
+            const clientes: ClientesProps[] = await knex
+                .select()
+                .from('clientes')
+
+            return clientes
+        } catch {
+            return null
+        }
+    }
 }
