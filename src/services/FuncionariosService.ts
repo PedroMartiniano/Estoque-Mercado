@@ -1,18 +1,19 @@
 import { CreateFuncionarioProps, FuncionarioProps } from "../@types/Funcionarios";
+import { CreateSessaoProps } from "../@types/Sessoes";
 import { AppError } from "../error/AppError";
 import { FuncionariosRepository } from "../repositories/interfaces/funcionarios-interfaces";
 
 export class FuncionariosService {
     constructor(private funcionariosRepository: FuncionariosRepository) { }
 
-    async createFuncionarioExecute(data: CreateFuncionarioProps): Promise<FuncionarioProps | null> {
+    async createFuncionarioExecute(data: CreateFuncionarioProps, sessao: CreateSessaoProps): Promise<FuncionarioProps | null> {
         const isCpfExist = await this.funcionariosRepository.getFuncionarioByCpf(data.cpf)
 
         if (isCpfExist) {
             throw new AppError('Cpf already exists', 400)
         }
 
-        const funcionario = await this.funcionariosRepository.createFuncionario(data)
+        const funcionario = await this.funcionariosRepository.createFuncionario(data, sessao)
 
         if (funcionario === null) {
             throw new AppError('Something went wrong creating funcionário.', 500)
@@ -21,7 +22,7 @@ export class FuncionariosService {
         return funcionario
     }
 
-    async getFuncionarioByIdExecute(id: string): Promise<FuncionarioProps | null> {
+    async getFuncionarioByIdExecute(id: string): Promise<FuncionarioProps> {
         const funcionario = await this.funcionariosRepository.getFuncionarioById(id)
 
         if (funcionario === null) {

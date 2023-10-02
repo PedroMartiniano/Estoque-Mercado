@@ -1,10 +1,16 @@
 import { FastifyInstance } from "fastify";
 import { FuncionariosController } from "../controller/FuncionariosController";
+import { verifyJwt } from "../middlewares/verifyJwt";
+import { verifyCargo } from "../middlewares/verifyCargo";
+import { verifyFunc } from "../middlewares/verifyFunc";
 
 export const funcionariosRoutes = async (app: FastifyInstance) => {
     const funcionariosController = new FuncionariosController
 
-    app.post('/create', async (req, rep) => {
+    app.addHook('onRequest', verifyJwt)
+    app.addHook('onRequest', verifyFunc)
+
+    app.post('/create', { onRequest: [verifyCargo('GERENTE')] }, async (req, rep) => {
         await funcionariosController.createFuncionarioHandler(req, rep)
     })
 

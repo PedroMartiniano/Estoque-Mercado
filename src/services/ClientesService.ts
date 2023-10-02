@@ -1,18 +1,19 @@
 import { ClientesProps, CreateClienteProps } from "../@types/Clientes";
+import { CreateSessaoProps } from "../@types/Sessoes";
 import { AppError } from "../error/AppError";
 import { ClientesRepository } from "../repositories/interfaces/clientes-interface";
 
 export class ClientesService {
     constructor(private clientesRepository: ClientesRepository) { }
 
-    async createClientesExecute(data: CreateClienteProps): Promise<ClientesProps | null> {
+    async createClientesExecute(data: CreateClienteProps, sessao: CreateSessaoProps): Promise<ClientesProps | null> {
         const clienteCpf = await this.clientesRepository.getClienteByCpf(data.cpf)
 
         if (clienteCpf) {
             throw new AppError('Cpf already exists', 400)
         }
 
-        const cliente = await this.clientesRepository.createCliente(data)
+        const cliente = await this.clientesRepository.createCliente(data, sessao)
 
         if (cliente === null) {
             throw new AppError('Something went wrong creating cliente', 500)
@@ -21,7 +22,7 @@ export class ClientesService {
         return cliente
     }
 
-    async getClienteByIdExecute(id: string): Promise<ClientesProps | null> {
+    async getClienteByIdExecute(id: string): Promise<ClientesProps> {
         const cliente = await this.clientesRepository.getClienteById(id)
 
         if (cliente === null) {

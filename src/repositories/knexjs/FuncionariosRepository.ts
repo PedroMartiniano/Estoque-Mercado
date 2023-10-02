@@ -2,18 +2,23 @@ import { CreateFuncionarioProps, FuncionarioProps } from "../../@types/Funcionar
 import { FuncionariosRepository } from "../interfaces/funcionarios-interfaces";
 import knex from '../../../database'
 import { v4 as uuid } from 'uuid'
+import { CreateSessaoProps } from "../../@types/Sessoes";
+import { hash } from "bcrypt";
 
 export class KnexFuncionariosRepository implements FuncionariosRepository {
-    async createFuncionario(data: CreateFuncionarioProps): Promise<FuncionarioProps | null> {
+    async createFuncionario(data: CreateFuncionarioProps, sessao: CreateSessaoProps): Promise<FuncionarioProps | null> {
         const { nome, sobrenome, cargo, cpf } = data
+        const { email, senha } = sessao
 
         try {
-            const id = uuid()
+            const id_func = uuid()
+            const id_sessao = uuid()
+            const hashPassword = await hash(senha, 4)
 
             const res: FuncionarioProps = await knex.transaction(async (trx) => {
                 await trx
                     .insert({
-                        id,
+                        id: id_func,
                         nome,
                         sobrenome,
                         cargo,
@@ -21,10 +26,19 @@ export class KnexFuncionariosRepository implements FuncionariosRepository {
                     })
                     .into('funcionarios')
 
+                await trx
+                    .insert({
+                        id: id_sessao,
+                        id_func,
+                        email,
+                        senha: hashPassword
+                    })
+                    .into('sessoes')
+
                 const funcionario: FuncionarioProps[] = await trx
                     .select()
                     .from('funcionarios')
-                    .where({ id })
+                    .where({ id: id_func })
 
                 return funcionario[0]
             })

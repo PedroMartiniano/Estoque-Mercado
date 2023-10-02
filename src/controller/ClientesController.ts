@@ -8,15 +8,17 @@ export class ClientesController {
         const clienteSchema = z.object({
             nome: z.string(),
             sobrenome: z.string(),
-            cpf: z.string()
+            cpf: z.string(),
+            email: z.string().email(),
+            senha: z.string().min(6)
         })
 
-        const { nome, sobrenome, cpf } = clienteSchema.parse(req.body)
+        const { nome, sobrenome, cpf, email, senha } = clienteSchema.parse(req.body)
 
         const clientesService = makeClientesService()
 
         try {
-            const cliente = await clientesService.createClientesExecute({ nome, sobrenome, cpf })
+            const cliente = await clientesService.createClientesExecute({ nome, sobrenome, cpf }, { email, senha })
 
             return rep.status(201).send({ success: true, data: cliente })
         } catch (e: any) {

@@ -9,15 +9,17 @@ export class FuncionariosController {
             nome: z.string(),
             sobrenome: z.string(),
             cargo: z.enum(['FUNCIONARIO', 'GERENTE']),
-            cpf: z.string().length(11)
+            cpf: z.string().length(11),
+            email: z.string().email(),
+            senha: z.string().min(6)
         })
 
-        const { nome, sobrenome, cargo, cpf } = funcionarioSchema.parse(req.body)
+        const { nome, sobrenome, cargo, cpf, email, senha } = funcionarioSchema.parse(req.body)
 
         const funcionarioService = makeFuncionariosService()
 
         try {
-            const funcionario = await funcionarioService.createFuncionarioExecute({ nome, sobrenome, cargo, cpf })
+            const funcionario = await funcionarioService.createFuncionarioExecute({ nome, sobrenome, cargo, cpf }, { email, senha })
 
             return rep.status(201).send({ success: true, data: funcionario })
         } catch (e: any) {

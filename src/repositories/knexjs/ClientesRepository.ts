@@ -2,28 +2,42 @@ import { v4 as uuid } from "uuid";
 import knex from "../../../database";
 import { CreateClienteProps, ClientesProps } from "../../@types/Clientes";
 import { ClientesRepository } from "../interfaces/clientes-interface";
+import { CreateSessaoProps } from "../../@types/Sessoes";
+import { hash } from "bcrypt";
 
 export class KnexClientesRepository implements ClientesRepository {
-    async createCliente(data: CreateClienteProps): Promise<ClientesProps | null> {
+    async createCliente(data: CreateClienteProps, sessao: CreateSessaoProps): Promise<ClientesProps | null> {
         const { nome, sobrenome, cpf } = data
+        const { email, senha } = sessao
 
         try {
-            const id = uuid()
+            const id_cliente = uuid()
+            const id_sessao = uuid()
+            const hashPassword = await hash(senha, 4)
 
             const res: ClientesProps = await knex.transaction(async (trx) => {
                 await trx
                     .insert({
-                        id,
+                        id: id_cliente,
                         nome,
                         sobrenome,
                         cpf
                     })
                     .into('clientes')
 
+                await trx
+                    .insert({
+                        id: id_sessao,
+                        id_cliente,
+                        email,
+                        senha: hashPassword
+                    })
+                    .into('sessoes')
+
                 const cliente: ClientesProps[] = await trx
                     .select()
                     .from('clientes')
-                    .where({ id })
+                    .where({ id: id_cliente })
 
                 return cliente[0]
             })
