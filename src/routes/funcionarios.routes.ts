@@ -18,6 +18,10 @@ export const funcionariosRoutes = async (app: FastifyInstance) => {
         await funcionariosController.getFuncionarioByIdHandler(req, rep)
     })
 
+    app.get('/get-me', async (req, rep) => {
+        await funcionariosController.getMeFuncHandler(req, rep)
+    })
+
     app.put('/update/:id', async (req, rep) => {
         await funcionariosController.updateFuncionarioHandler(req, rep)
     })

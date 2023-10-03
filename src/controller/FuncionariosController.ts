@@ -122,4 +122,22 @@ export class FuncionariosController {
             throw new AppError(e.message, e.statusCode)
         }
     }
+
+    async getMeFuncHandler(req: FastifyRequest, rep: FastifyReply) {
+        const idFuncSchema = z.object({
+            id_func: z.string().uuid()
+        })
+
+        const { id_func } = idFuncSchema.parse(req.user)
+
+        const funcionariosService = makeFuncionariosService()
+
+        try {
+            const funcionario = await funcionariosService.getFuncionarioByIdExecute(id_func)
+
+            return rep.status(200).send({ success: true, data: funcionario })
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
+    }
 }

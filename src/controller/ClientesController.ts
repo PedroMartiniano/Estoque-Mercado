@@ -70,15 +70,16 @@ export class ClientesController {
         })
 
         const idSchema = z.object({
-            id: z.string().uuid()
+            id_cliente: z.string().uuid()
         })
 
         const { nome, sobrenome, cpf, status_cliente } = clienteSchema.parse(req.body)
-        const { id } = idSchema.parse(req.params)
+        const { id_cliente } = idSchema.parse(req.user)
 
         const clientesService = makeClientesService()
 
         try {
+            const id = id_cliente
             const cliente = await clientesService.updateClienteExecute({ id, nome, sobrenome, cpf, status_cliente })
 
             return rep.status(200).send({ success: true, data: cliente })
@@ -116,6 +117,24 @@ export class ClientesController {
             }
 
             return rep.status(200).send({ success: false, data: clientes })
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
+    }
+
+    async getMeClienteHandler(req: FastifyRequest, rep: FastifyReply) {
+        const idClienteSchema = z.object({
+            id_cliente: z.string().uuid()
+        })
+
+        const { id_cliente } = idClienteSchema.parse(req.user)
+
+        const clientesService = makeClientesService()
+
+        try {
+            const cliente = await clientesService.getClienteByIdExecute(id_cliente)
+
+            return rep.status(200).send({ success: true, data: cliente })
         } catch (e: any) {
             throw new AppError(e.message, e.statusCode)
         }
