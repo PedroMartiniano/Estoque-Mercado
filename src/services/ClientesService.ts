@@ -6,7 +6,7 @@ import { ClientesRepository } from "../repositories/interfaces/clientes-interfac
 export class ClientesService {
     constructor(private clientesRepository: ClientesRepository) { }
 
-    async createClientesExecute(data: CreateClienteProps, sessao: CreateSessaoProps): Promise<ClientesProps | null> {
+    async createClientesExecute(data: CreateClienteProps, sessao: CreateSessaoProps): Promise<ClientesProps> {
         const clienteCpf = await this.clientesRepository.getClienteByCpf(data.cpf)
 
         if (clienteCpf) {
@@ -32,17 +32,17 @@ export class ClientesService {
         return cliente
     }
 
-    async getClienteByCpfExecute(cpf: string): Promise<ClientesProps | null> {
-        const cliente = await this.clientesRepository.getClienteByCpf(cpf)
+    // async getClienteByCpfExecute(cpf: string): Promise<ClientesProps> {
+    //     const cliente = await this.clientesRepository.getClienteByCpf(cpf)
 
-        if (cliente === null) {
-            throw new AppError('Error on geting cliente', 500)
-        }
+    //     if (cliente === null) {
+    //         throw new AppError('Error on geting cliente', 500)
+    //     }
 
-        return cliente
-    }
+    //     return cliente
+    // }
 
-    async updateClienteExecute(data: ClientesProps): Promise<ClientesProps | null> {
+    async updateClienteExecute(data: ClientesProps): Promise<ClientesProps> {
         const clienteCpf = await this.clientesRepository.getClienteByCpf(data.cpf)
 
         if (clienteCpf) {
@@ -60,7 +60,7 @@ export class ClientesService {
         return cliente
     }
 
-    async deleteClienteExecute(id: string): Promise<ClientesProps | null> {
+    async deleteClienteExecute(id: string): Promise<ClientesProps> {
         const clienteId = await this.clientesRepository.getClienteById(id)
 
         if (!clienteId) {

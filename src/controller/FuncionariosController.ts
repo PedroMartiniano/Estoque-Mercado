@@ -2,6 +2,7 @@ import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
 import { makeFuncionariosService } from '../factory/makeFuncionariosService'
 import { AppError } from '../error/AppError'
+import { makeSessoesService } from '../factory/makeSessoesService'
 
 export class FuncionariosController {
     async createFuncionarioHandler(req: FastifyRequest, rep: FastifyReply) {
@@ -16,6 +17,18 @@ export class FuncionariosController {
 
         const { nome, sobrenome, cargo, cpf, email, senha } = funcionarioSchema.parse(req.body)
 
+        const sessaoService = makeSessoesService()
+
+        try {
+            const doEmailExist = await sessaoService.getSessaoByEmailExecute(email)
+
+            if (doEmailExist) {
+                return rep.status(400).send({ success: false, message: 'Email already exists.' })
+            }
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
+
         const funcionarioService = makeFuncionariosService()
 
         try {
@@ -29,7 +42,7 @@ export class FuncionariosController {
 
     async getFuncionarioByIdHandler(req: FastifyRequest, rep: FastifyReply) {
         const idSchema = z.object({
-            id: z.string()
+            id: z.string().uuid()
         })
 
         const { id } = idSchema.parse(req.params)
@@ -59,7 +72,7 @@ export class FuncionariosController {
         })
 
         const idSchema = z.object({
-            id: z.string()
+            id: z.string().uuid()
         })
 
         const { nome, sobrenome, cargo, cpf, status_func } = funcionarioSchema.parse(req.body)
@@ -78,7 +91,7 @@ export class FuncionariosController {
 
     async deleteFuncionarioHandler(req: FastifyRequest, rep: FastifyReply) {
         const idSchema = z.object({
-            id: z.string()
+            id: z.string().uuid()
         })
 
         const { id } = idSchema.parse(req.params)

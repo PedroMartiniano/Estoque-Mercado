@@ -27,4 +27,14 @@ export class SessoesService {
 
         return user
     }
+
+    async getSessaoByEmailExecute(email: string): Promise<boolean> {
+        const sessao = await this.sessoesRepository.getSessaoByEmail(email)
+
+        if (sessao === null) {
+            throw new AppError('Error on verifying email. Try again!', 500)
+        }
+
+        return (sessao) ? true : false
+    }
 }

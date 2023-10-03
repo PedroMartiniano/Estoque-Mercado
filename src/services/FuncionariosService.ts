@@ -6,7 +6,7 @@ import { FuncionariosRepository } from "../repositories/interfaces/funcionarios-
 export class FuncionariosService {
     constructor(private funcionariosRepository: FuncionariosRepository) { }
 
-    async createFuncionarioExecute(data: CreateFuncionarioProps, sessao: CreateSessaoProps): Promise<FuncionarioProps | null> {
+    async createFuncionarioExecute(data: CreateFuncionarioProps, sessao: CreateSessaoProps): Promise<FuncionarioProps> {
         const isCpfExist = await this.funcionariosRepository.getFuncionarioByCpf(data.cpf)
 
         if (isCpfExist) {
@@ -32,17 +32,17 @@ export class FuncionariosService {
         return funcionario
     }
 
-    async getFuncionarioByCpfExecute(cpf: string): Promise<FuncionarioProps | null> {
-        const funcionario = await this.funcionariosRepository.getFuncionarioByCpf(cpf)
+    // async getFuncionarioByCpfExecute(cpf: string): Promise<FuncionarioProps | null> {
+    //     const funcionario = await this.funcionariosRepository.getFuncionarioByCpf(cpf)
 
-        if (funcionario === null) {
-            throw new AppError('Error on getting funcionario', 500)
-        }
+    //     if (funcionario === null) {
+    //         throw new AppError('Error on getting funcionario', 500)
+    //     }
 
-        return funcionario
-    }
+    //     return funcionario
+    // }
 
-    async updateFuncionarioExecute(data: FuncionarioProps): Promise<FuncionarioProps | null> {
+    async updateFuncionarioExecute(data: FuncionarioProps): Promise<FuncionarioProps> {
         const cpfFuncionario = await this.funcionariosRepository.getFuncionarioByCpf(data.cpf)
 
         if (cpfFuncionario) {
@@ -60,7 +60,7 @@ export class FuncionariosService {
         return funcionario
     }
 
-    async deleteFuncionarioExecute(id: string): Promise<FuncionarioProps | null> {
+    async deleteFuncionarioExecute(id: string): Promise<FuncionarioProps> {
         const funcionarioId = await this.funcionariosRepository.getFuncionarioById(id)
 
         if (!funcionarioId) {

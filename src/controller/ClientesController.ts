@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 import { makeClientesService } from "../factory/makeClientesService";
 import { AppError } from "../error/AppError";
+import { makeSessoesService } from "../factory/makeSessoesService";
 
 export class ClientesController {
     async createClienteHandler(req: FastifyRequest, rep: FastifyReply) {
@@ -14,6 +15,18 @@ export class ClientesController {
         })
 
         const { nome, sobrenome, cpf, email, senha } = clienteSchema.parse(req.body)
+
+        const sessaoService = makeSessoesService()
+
+        try {
+            const doEmailExist = await sessaoService.getSessaoByEmailExecute(email)
+
+            if (doEmailExist) {
+                return rep.status(400).send({ success: false, message: "Email already exists." })
+            }
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
 
         const clientesService = makeClientesService()
 
@@ -28,7 +41,7 @@ export class ClientesController {
 
     async getClienteByIdHandler(req: FastifyRequest, rep: FastifyReply) {
         const idSchema = z.object({
-            id: z.string()
+            id: z.string().uuid()
         })
 
         const { id } = idSchema.parse(req.params)
@@ -57,7 +70,7 @@ export class ClientesController {
         })
 
         const idSchema = z.object({
-            id: z.string()
+            id: z.string().uuid()
         })
 
         const { nome, sobrenome, cpf, status_cliente } = clienteSchema.parse(req.body)
@@ -76,7 +89,7 @@ export class ClientesController {
 
     async deleteClienteHandler(req: FastifyRequest, rep: FastifyReply) {
         const idSchema = z.object({
-            id: z.string()
+            id: z.string().uuid()
         })
 
         const { id } = idSchema.parse(req.params)
