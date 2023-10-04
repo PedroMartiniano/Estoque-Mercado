@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { SessoesController } from "../controller/sessoesController";
+import { SessoesController } from "../controller/SessoesController";
 
 export const sessoesRoutes = async (app: FastifyInstance) => {
     const sessoesController = new SessoesController
