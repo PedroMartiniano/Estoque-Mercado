@@ -7,4 +7,12 @@ export const categoriasRoutes = async (app: FastifyInstance) => {
     app.post('/create', async (req, rep) => {
         await categoriasController.createCategoriaController(req, rep)
     })
+
+    app.get('/get/:id', async (req, rep) => {
+        await categoriasController.getCategoriaByIdHandler(req, rep)
+    })
+
+    app.get('/get-all', async (req, rep) => {
+        await categoriasController.getAllCategoriasHandler(req, rep)
+    })
 }
