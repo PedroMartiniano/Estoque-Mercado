@@ -4,4 +4,5 @@ export interface ProdutosRepository {
     createProduto(data: CreateProdutoProps): Promise<ProdutosProps | null>
     uploadImage(data: uploadImageProdutoProps): Promise<ProdutosProps | null>
     entradaProduto(data: EntradaProdutoProps): Promise<ProdutosProps | null>
+    getProdutoById(id: string): Promise<ProdutosProps | null>
 }

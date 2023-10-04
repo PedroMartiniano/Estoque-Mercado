@@ -34,4 +34,14 @@ export class ProdutosService {
 
         return produto
     }
+
+    async getProdutoByIdExecute(id: string): Promise<ProdutosProps> {
+        const produto = await this.produtosRepository.getProdutoById(id)
+
+        if (produto === null) {
+            throw new AppError('erro geting produto', 500)
+        }
+
+        return produto
+    }
 }

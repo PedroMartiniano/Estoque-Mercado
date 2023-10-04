@@ -88,4 +88,17 @@ export class KnexProdutosRepository implements ProdutosRepository {
             return null
         }
     }
+
+    async getProdutoById(id: string): Promise<ProdutosProps | null> {
+        try {
+            const produto: ProdutosProps[] = await knex
+                .select()
+                .from('produtos')
+                .where({ id })
+
+            return produto[0]
+        } catch {
+            return null
+        }
+    }
 }

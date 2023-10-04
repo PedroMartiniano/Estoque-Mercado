@@ -78,4 +78,27 @@ export class ProdutosController {
             throw new AppError(e.message, e.statusCode)
         }
     }
+
+    async getProdutoByIdHandler(req: FastifyRequest, rep: FastifyReply) {
+        const idProdSchema = z.object({
+            id: z.string().uuid()
+        })
+
+        const { id } = idProdSchema.parse(req.params)
+
+        const produtosService = makeProdutosService()
+
+        try {
+            const produto = await produtosService.getProdutoByIdExecute(id)
+
+            if(!produto) {
+                return rep.status(400).send({ success: false, message: 'None produto founded!'})
+            }
+
+            return rep.status(200).send({ success: true, data: produto })
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
+    }
+
 }
