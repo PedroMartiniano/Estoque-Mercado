@@ -56,4 +56,26 @@ export class ProdutosController {
             throw new AppError(e.message, e.statusCode)
         }
     }
+
+    async entradaProdutoHandler(req: FastifyRequest, rep: FastifyReply) {
+        const qtdeSchema = z.object({
+            qtdeProd: z.number().refine(value => value > 0, { message: 'Qtde must be greater than 0.' })
+        })
+
+        const idSchema = z.object({
+            id: z.string().uuid()
+        })
+
+        const { qtdeProd } = qtdeSchema.parse(req.body)
+        const { id } = idSchema.parse(req.params)
+
+        const produtosService = makeProdutosService()
+        try {
+            const produto = await produtosService.entradaProdutoExecute({ id, qtdeProd })
+
+            return rep.status(201).send({ success: true, data: produto })
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
+    }
 }

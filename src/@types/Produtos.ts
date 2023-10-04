@@ -19,7 +19,7 @@ export interface CreateProdutoProps {
 
 export interface EntradaProdutoProps {
     id: string
-    qtdeProd: string
+    qtdeProd: number
 }
 
 export interface uploadImageProdutoProps {

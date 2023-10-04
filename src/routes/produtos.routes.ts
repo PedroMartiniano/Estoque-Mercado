@@ -12,4 +12,8 @@ export const produtosRoutes = async (app: FastifyInstance) => {
     app.post('/uploadImage/:id', { preHandler: upload.single('product') }, async (req, rep) => {
         await produtosController.uploadImageHandler(req, rep)
     })
+
+    app.post('/entrada/:id', async (req, rep) => {
+        await produtosController.entradaProdutoHandler(req, rep)
+    })
 }
