@@ -19,6 +19,10 @@ export class SessoesService {
             throw new AppError('Email or password incorect.')
         }
 
+        if (user.status_sessao === 0) {
+            throw new AppError('User disabled.')
+        }
+
         const doPasswordMatch = await compare(senha, user.senha)
 
         if (!doPasswordMatch) {

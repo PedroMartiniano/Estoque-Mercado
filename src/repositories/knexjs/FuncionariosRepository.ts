@@ -113,6 +113,11 @@ export class KnexFuncionariosRepository implements FuncionariosRepository {
                     .from('funcionarios')
                     .where({ id })
 
+                await trx
+                    .update({ status_sessao: 0 })
+                    .from('sessoes')
+                    .where({ id_func: id })
+
                 const funcionario: FuncionarioProps[] = await trx
                     .select()
                     .from('funcionarios')

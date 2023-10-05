@@ -111,6 +111,11 @@ export class KnexClientesRepository implements ClientesRepository {
                     .from('clientes')
                     .where({ id })
 
+                await trx
+                    .update({ status_sessao: 0 })
+                    .from('sessoes')
+                    .where({ id_cliente: id })
+
                 const cliente: ClientesProps[] = await trx
                     .select()
                     .from('clientes')
