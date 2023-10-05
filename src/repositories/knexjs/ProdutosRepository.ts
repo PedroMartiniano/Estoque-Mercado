@@ -1,7 +1,8 @@
 import { v4 as uuid } from "uuid";
 import knex from "../../../database";
-import { CreateProdutoProps, EntradaProdutoProps, ProdutosProps, uploadImageProdutoProps } from "../../@types/Produtos";
+import { CreateProdutoProps, modifyProdutoProps, ProdutosProps, uploadImageProdutoProps } from "../../@types/Produtos";
 import { ProdutosRepository } from "../interfaces/produtos-interface";
+import { AppError } from "../../error/AppError";
 
 export class KnexProdutosRepository implements ProdutosRepository {
     async createProduto(data: CreateProdutoProps): Promise<ProdutosProps | null> {
@@ -59,7 +60,7 @@ export class KnexProdutosRepository implements ProdutosRepository {
         }
     }
 
-    async entradaProduto(data: EntradaProdutoProps): Promise<ProdutosProps | null> {
+    async entradaProduto(data: modifyProdutoProps): Promise<ProdutosProps | null> {
         try {
             const { id, qtdeProd } = data
             const res: ProdutosProps = await knex.transaction(async (trx) => {
@@ -97,6 +98,54 @@ export class KnexProdutosRepository implements ProdutosRepository {
                 .where({ id })
 
             return produto[0]
+        } catch {
+            return null
+        }
+    }
+
+    async getProdutoByIdCat(id_cat: string): Promise<ProdutosProps[] | null> {
+        try {
+            const produtos: ProdutosProps[] = await knex
+                .select()
+                .from('produtos')
+                .where({ id_cat })
+
+            return produtos
+        } catch {
+            return null
+        }
+    }
+
+    async baixaProduto(data: modifyProdutoProps): Promise<ProdutosProps | null> {
+        try {
+            const { id, qtdeProd } = data
+
+            const res: ProdutosProps = await knex.transaction(async (trx) => {
+                const prod: ProdutosProps[] = await trx
+                    .select()
+                    .from('produtos')
+                    .where({ id })
+
+                if (prod[0].qtde < qtdeProd) {
+                    throw new AppError()
+                }
+
+                await trx
+                    .update({
+                        qtde: prod[0].qtde - qtdeProd
+                    })
+                    .from('produtos')
+                    .where({ id })
+
+                const newProd: ProdutosProps[] = await trx
+                    .select()
+                    .from('produtos')
+                    .where({ id })
+
+                return newProd[0]
+            })
+
+            return res
         } catch {
             return null
         }

@@ -91,8 +91,8 @@ export class ProdutosController {
         try {
             const produto = await produtosService.getProdutoByIdExecute(id)
 
-            if(!produto) {
-                return rep.status(400).send({ success: false, message: 'None produto founded!'})
+            if (!produto) {
+                return rep.status(400).send({ success: false, message: 'None produto founded!' })
             }
 
             return rep.status(200).send({ success: true, data: produto })
@@ -101,4 +101,44 @@ export class ProdutosController {
         }
     }
 
+    async getProdutoByIdCatHandler(req: FastifyRequest, rep: FastifyReply) {
+        const idCatSchema = z.object({
+            id_cat: z.string().uuid()
+        })
+
+        const { id_cat } = idCatSchema.parse(req.params)
+
+        const produtosService = makeProdutosService()
+
+        try {
+            const produtos = await produtosService.getProdutoByIdCatExecute(id_cat)
+
+            return rep.status(200).send({ success: true, data: produtos })
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
+    }
+
+    async baixaProdutoHandler(req: FastifyRequest, rep: FastifyReply) {
+        const qtdeSchema = z.object({
+            qtdeProd: z.number().refine(value => value > 0, { message: 'Qtde must be greater than 0.' })
+        })
+
+        const idProdSchema = z.object({
+            id: z.string()
+        })
+
+        const { qtdeProd } = qtdeSchema.parse(req.body)
+        const { id } = idProdSchema.parse(req.params)
+
+        const produtosService = makeProdutosService()
+
+        try {
+            const produto = await produtosService.baixaProdutoExecute({ id, qtdeProd })
+
+            return rep.status(200).send({ success: true, data: produto })
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
+    }
 }

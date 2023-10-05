@@ -1,4 +1,4 @@
-import { CreateProdutoProps, EntradaProdutoProps, ProdutosProps, uploadImageProdutoProps } from "../@types/Produtos";
+import { CreateProdutoProps, modifyProdutoProps, ProdutosProps, uploadImageProdutoProps } from "../@types/Produtos";
 import { AppError } from "../error/AppError";
 import { ProdutosRepository } from "../repositories/interfaces/produtos-interface";
 
@@ -25,7 +25,7 @@ export class ProdutosService {
         return produto
     }
 
-    async entradaProdutoExecute(data: EntradaProdutoProps): Promise<ProdutosProps> {
+    async entradaProdutoExecute(data: modifyProdutoProps): Promise<ProdutosProps> {
         const produto = await this.produtosRepository.entradaProduto(data)
 
         if (produto === null) {
@@ -40,6 +40,26 @@ export class ProdutosService {
 
         if (produto === null) {
             throw new AppError('erro geting produto', 500)
+        }
+
+        return produto
+    }
+
+    async getProdutoByIdCatExecute(id_cat: string): Promise<ProdutosProps[]> {
+        const produto = await this.produtosRepository.getProdutoByIdCat(id_cat)
+
+        if (produto === null) {
+            throw new AppError('erro geting produtos', 500)
+        }
+
+        return produto
+    }
+
+    async baixaProdutoExecute(data: modifyProdutoProps): Promise<ProdutosProps> {
+        const produto = await this.produtosRepository.baixaProduto(data)
+
+        if (produto === null) {
+            throw new AppError('Error on request', 500)
         }
 
         return produto

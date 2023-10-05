@@ -17,7 +17,7 @@ export interface CreateProdutoProps {
     preco: number
 }
 
-export interface EntradaProdutoProps {
+export interface modifyProdutoProps {
     id: string
     qtdeProd: number
 }

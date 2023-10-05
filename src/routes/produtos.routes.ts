@@ -20,4 +20,12 @@ export const produtosRoutes = async (app: FastifyInstance) => {
     app.get('/get/:id', async (req, rep) => {
         await produtosController.getProdutoByIdHandler(req, rep)
     })
+
+    app.get('/get-cat/:id_cat', async (req, rep) => {
+        await produtosController.getProdutoByIdCatHandler(req, rep)
+    })
+
+    app.post('/baixa/:id', async (req, rep) => {
+        await produtosController.baixaProdutoHandler(req, rep)
+    })
 }
