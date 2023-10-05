@@ -9,7 +9,7 @@ export const clientesRoutes = async (app: FastifyInstance) => {
         await clientesController.createClienteHandler(req, rep)
     })
 
-    app.addHook('onRequest', verifyJwt)
+    // app.addHook('onRequest', verifyJwt)
 
     app.get('/get/:id', async (req, rep) => {
         await clientesController.getClienteByIdHandler(req, rep)
