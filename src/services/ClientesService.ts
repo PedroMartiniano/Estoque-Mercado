@@ -26,7 +26,7 @@ export class ClientesService {
         const cliente = await this.clientesRepository.getClienteById(id)
 
         if (cliente === null) {
-            throw new AppError('Something went wrong geting cliente', 500)
+            throw new AppError('Something went wrong getting cliente', 500)
         }
 
         return cliente
@@ -36,7 +36,7 @@ export class ClientesService {
     //     const cliente = await this.clientesRepository.getClienteByCpf(cpf)
 
     //     if (cliente === null) {
-    //         throw new AppError('Error on geting cliente', 500)
+    //         throw new AppError('Error on getting cliente', 500)
     //     }
 
     //     return cliente
@@ -84,7 +84,7 @@ export class ClientesService {
         const clientes = await this.clientesRepository.getAllClientes()
 
         if (clientes === null) {
-            throw new AppError('Error on geting clientes', 500)
+            throw new AppError('Error on getting clientes', 500)
         }
 
         return clientes

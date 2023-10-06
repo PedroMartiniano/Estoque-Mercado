@@ -5,6 +5,7 @@ import { sessoesRoutes } from "./sessoes.routes";
 import { categoriasRoutes } from "./categorias.routes";
 import { produtosRoutes } from "./produtos.routes";
 import { comprasRoutes } from "./compras.routes";
+import { avaliacoesRoutes } from "./avaliacoes.routes";
 
 export const routes = async (app: FastifyInstance) => {
 
@@ -14,4 +15,5 @@ export const routes = async (app: FastifyInstance) => {
     app.register(categoriasRoutes, { prefix: '/categorias' })
     app.register(produtosRoutes, { prefix: '/produtos' })
     app.register(comprasRoutes, { prefix: '/compras' })
+    app.register(avaliacoesRoutes, { prefix: '/avaliacoes' })
 }

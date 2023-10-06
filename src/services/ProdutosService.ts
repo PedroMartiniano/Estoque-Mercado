@@ -39,7 +39,7 @@ export class ProdutosService {
         const produto = await this.produtosRepository.getProdutoById(id)
 
         if (produto === null) {
-            throw new AppError('erro geting produto', 500)
+            throw new AppError('erro getting produto', 500)
         }
 
         return produto
@@ -49,7 +49,7 @@ export class ProdutosService {
         const produto = await this.produtosRepository.getProdutoByIdCat(id_cat)
 
         if (produto === null) {
-            throw new AppError('erro geting produtos', 500)
+            throw new AppError('erro getting produtos', 500)
         }
 
         return produto

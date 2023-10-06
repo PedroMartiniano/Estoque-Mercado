@@ -26,7 +26,7 @@ export class FuncionariosService {
         const funcionario = await this.funcionariosRepository.getFuncionarioById(id)
 
         if (funcionario === null) {
-            throw new AppError('Error on geting funcionario', 500)
+            throw new AppError('Error on getting funcionario', 500)
         }
 
         return funcionario
@@ -84,7 +84,7 @@ export class FuncionariosService {
         const funcionarios = await this.funcionariosRepository.getAllFuncionarios()
 
         if (funcionarios === null) {
-            throw new AppError('Error on geting funcionarios', 500)
+            throw new AppError('Error on getting funcionarios', 500)
         }
 
         return funcionarios

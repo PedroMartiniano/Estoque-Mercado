@@ -25,7 +25,7 @@ export class CategoriasService {
         const categoria = await this.categoriasRepository.getCategoriaById(id)
 
         if (categoria === null) {
-            throw new AppError('Error on geting categoria', 500)
+            throw new AppError('Error on getting categoria', 500)
         }
 
         return categoria
@@ -35,7 +35,7 @@ export class CategoriasService {
         const categorias = await this.categoriasRepository.getAllCategorias()
 
         if (categorias === null) {
-            throw new AppError('Error on geting categorias', 500)
+            throw new AppError('Error on getting categorias', 500)
         }
 
         return categorias

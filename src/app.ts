@@ -4,7 +4,7 @@ import fastifyJwt from "@fastify/jwt";
 import { env } from "./env";
 import { errorHandler } from "./error/errorHandler";
 import multer from "fastify-multer";
-import { storage } from "./multer";
+import { storage } from "./lib/multer";
 import { routes } from "./routes";
 
 const app = fastify()

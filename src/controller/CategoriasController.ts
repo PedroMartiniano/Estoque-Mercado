@@ -1,5 +1,4 @@
-import { FastifyReply } from "fastify/types/reply";
-import { FastifyRequest } from "fastify/types/request";
+import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 import { makeCategoriasService } from "../factory/makeCategoriasService";
 import { AppError } from "../error/AppError";

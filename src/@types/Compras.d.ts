@@ -12,3 +12,8 @@ export interface CreateCompraProps {
     qtde: number
     preco_total: number
 }
+
+export interface UserProdCompraProps {
+    id_cliente: string
+    id_produto: string
+}

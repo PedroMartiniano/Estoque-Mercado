@@ -10,4 +10,12 @@ export const comprasRoutes = async (app: FastifyInstance) => {
     app.post('/create/:id_produto', async (req, rep) => {
         await comprasController.createCompraHandler(req, rep)
     })
+
+    app.get('/get/:id', async (req, rep) => {
+        await comprasController.getCompraByIdHandler(req, rep)
+    })
+
+    app.delete('/cancelar/:id', async (req, rep) => {
+        await comprasController.cancelarCompraHandler(req, rep)
+    })
 }

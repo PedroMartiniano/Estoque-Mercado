@@ -51,4 +51,47 @@ export class ComprasController {
             throw new AppError(e.message, e.statusCode)
         }
     }
+
+    async getCompraByIdHandler(req: FastifyRequest, rep: FastifyReply) {
+        const idCompraSchema = z.object({
+            id: z.string().uuid()
+        })
+
+        const { id } = idCompraSchema.parse(req.params)
+
+        const comprasService = makeComprasService()
+        try {
+            const compra = await comprasService.getCompraByIdExecute(id)
+
+            if (!compra) {
+                return rep.status(400).send({ success: false, message: 'None compras founded!' })
+            }
+
+            return rep.status(200).send({ success: true, data: compra })
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
+    }
+
+    async cancelarCompraHandler(req: FastifyRequest, rep: FastifyReply) {
+        const idCompraSchema = z.object({
+            id: z.string().uuid()
+        })
+
+        const idUserSchema = z.object({
+            id_cliente: z.string().uuid()
+        })
+
+        const { id } = idCompraSchema.parse(req.params)
+        const { id_cliente } = idUserSchema.parse(req.user)
+
+        const comprasService = makeComprasService()
+        try {
+            const compra = await comprasService.cancelarCompraExecute(id, id_cliente)
+
+            return rep.status(200).send({ success: true, data: compra })
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
+    }
 }
