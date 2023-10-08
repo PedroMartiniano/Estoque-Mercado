@@ -1,6 +1,6 @@
 import { v4 as uuid } from "uuid";
 import knex from "../../../database";
-import { CreateAvaliacaoProps, AvaliacoesProps } from "../../@types/Avaliacoes";
+import { CreateAvaliacaoProps, AvaliacoesProps, GetAvaliacaoProps } from "../../@types/Avaliacoes";
 import { AvaliacoesRepository } from "../interfaces/avaliacoes-interface";
 
 export class KnexAvaliacoesRepository implements AvaliacoesRepository {
@@ -30,6 +30,22 @@ export class KnexAvaliacoesRepository implements AvaliacoesRepository {
             })
 
             return res
+        } catch {
+            return null
+        }
+    }
+
+    async getAvaliacaoByUserProd(data: GetAvaliacaoProps): Promise<AvaliacoesProps | null> {
+        try {
+            const { id_cliente, id_produto } = data
+
+            const avaliacao: AvaliacoesProps[] = await knex
+                .select()
+                .from('avaliacoes')
+                .where({ id_cliente })
+                .andWhere({ id_produto })
+
+            return avaliacao[0]
         } catch {
             return null
         }

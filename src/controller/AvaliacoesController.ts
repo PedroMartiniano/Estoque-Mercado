@@ -35,10 +35,39 @@ export class AvaliacoesController {
         }
 
         const avaliacoesService = makeAvaliacoesService()
+
+        let verifica_msg = null
+
         try {
-            const avaliacao = await avaliacoesService.createAvaliacaoExecute({ id_cliente, id_produto, nota, menssagem })
+            const avaliacao = await avaliacoesService.createAvaliacaoExecute({ id_cliente, id_produto, nota, menssagem, verifica_msg })
 
             return rep.status(200).send({ success: true, data: avaliacao })
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
+    }
+
+    async getAvaliacaoByUserProdHandler(req: FastifyRequest, rep: FastifyReply) {
+        const idClienteSchema = z.object({
+            id_cliente: z.string().uuid()
+        })
+
+        const idProdSchema = z.object({
+            id_produto: z.string().uuid()
+        })
+
+        const { id_cliente } = idClienteSchema.parse(req.user)
+        const { id_produto } = idProdSchema.parse(req.params)
+
+        const avaliacoesService = makeAvaliacoesService()
+        try {
+            const avaliacoes = await avaliacoesService.getAvaliacaoByUserProdExecute({ id_cliente, id_produto })
+
+            if (!avaliacoes) {
+                return rep.status(400).send({ success: false, message: 'None avaliacoes founded!' })
+            }
+
+            return rep.status(200).send({ success: true, data: avaliacoes })
         } catch (e: any) {
             throw new AppError(e.message, e.statusCode)
         }

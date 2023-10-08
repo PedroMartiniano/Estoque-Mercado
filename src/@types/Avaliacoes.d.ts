@@ -12,5 +12,10 @@ export interface CreateAvaliacaoProps {
     id_produto: string
     nota: number
     menssagem: string
-    verifica_msg?: string
+    verifica_msg: string | null
+}
+
+export interface GetAvaliacaoProps {
+    id_cliente: string
+    id_produto: string
 }
