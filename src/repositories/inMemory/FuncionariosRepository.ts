@@ -4,13 +4,13 @@ import { FuncionariosRepository } from "../interfaces/funcionarios-interfaces";
 
 export class InMemoryFuncionariosRepository implements FuncionariosRepository {
     private dbInMemory: FuncionarioProps[] = []
-    private funcInMemory: FuncionarioProps[] = [
+    private FuncListInMemory: FuncionarioProps[] = [
         { id: '123', nome: 'first', sobrenome: 'func', cargo: 'GERENTE', cpf: '12345678910', status_func: 1 },
         { id: '321', nome: 'second', sobrenome: 'func', cargo: 'FUNCIONARIO', cpf: '12345678911', status_func: 1 }
     ]
 
     async createFuncionario(data: CreateFuncionarioProps, sessao: CreateSessaoProps): Promise<FuncionarioProps | null> {
-        const funcionario = {
+        const funcionario: FuncionarioProps = {
             id: `${this.dbInMemory.length}`,
             nome: data.nome,
             sobrenome: data.sobrenome,
@@ -47,7 +47,7 @@ export class InMemoryFuncionariosRepository implements FuncionariosRepository {
     async updateFuncionario(data: FuncionarioProps): Promise<FuncionarioProps | null> {
         const funcIndex = this.dbInMemory.findIndex(func => func.id === data.id)
 
-        const newFunc = {
+        const newFunc: FuncionarioProps = {
             ...this.dbInMemory[funcIndex],
             nome: data.nome,
             sobrenome: data.sobrenome,
@@ -66,7 +66,7 @@ export class InMemoryFuncionariosRepository implements FuncionariosRepository {
 
         const funcionario = this.dbInMemory[funcIndex]
 
-        const newFunc = {
+        const newFunc: FuncionarioProps = {
             ...funcionario,
             status_func: 0
         }
@@ -77,7 +77,7 @@ export class InMemoryFuncionariosRepository implements FuncionariosRepository {
     }
 
     async getAllFuncionarios(): Promise<FuncionarioProps[] | null> {
-        const funcionarios = this.funcInMemory
+        const funcionarios = this.FuncListInMemory
 
         return funcionarios
     }

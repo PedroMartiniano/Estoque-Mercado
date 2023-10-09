@@ -43,6 +43,12 @@ export class ClientesService {
     // }
 
     async updateClienteExecute(data: ClientesProps): Promise<ClientesProps> {
+        const clienteId = await this.clientesRepository.getClienteById(data.id)
+
+        if (!clienteId) {
+            throw new AppError('Cliente not founded', 400)
+        }
+
         const clienteCpf = await this.clientesRepository.getClienteByCpf(data.cpf)
 
         if (clienteCpf) {

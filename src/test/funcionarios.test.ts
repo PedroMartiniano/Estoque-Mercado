@@ -5,7 +5,7 @@ import { CreateFuncionarioProps, FuncionarioProps } from "../@types/Funcionarios
 import { CreateSessaoProps } from "../@types/Sessoes";
 import { AppError } from "../error/AppError";
 
-describe('Should test all funcionarios components', () => {
+describe('Should test all funcionarios service components', () => {
     let inMemoryFuncRepository: InMemoryFuncionariosRepository
     let funcionariosService: FuncionariosService
     let funcTest1: CreateFuncionarioProps = {
