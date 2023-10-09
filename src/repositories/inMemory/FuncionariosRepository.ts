@@ -47,12 +47,8 @@ export class InMemoryFuncionariosRepository implements FuncionariosRepository {
     async updateFuncionario(data: FuncionarioProps): Promise<FuncionarioProps | null> {
         const funcIndex = this.dbInMemory.findIndex(func => func.id === data.id)
 
-        if (funcIndex === -1) {
-            return null
-        }
-
         const newFunc = {
-            id: data.id,
+            ...this.dbInMemory[funcIndex],
             nome: data.nome,
             sobrenome: data.sobrenome,
             cargo: data.cargo,
@@ -67,10 +63,6 @@ export class InMemoryFuncionariosRepository implements FuncionariosRepository {
 
     async deleteFuncionario(id: string): Promise<FuncionarioProps | null> {
         const funcIndex = this.dbInMemory.findIndex(func => func.id === id)
-
-        if (funcIndex === -1) {
-            return null
-        }
 
         const funcionario = this.dbInMemory[funcIndex]
 

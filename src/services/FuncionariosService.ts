@@ -43,6 +43,12 @@ export class FuncionariosService {
     // }
 
     async updateFuncionarioExecute(data: FuncionarioProps): Promise<FuncionarioProps> {
+        const funcionarioId = await this.funcionariosRepository.getFuncionarioById(data.id)
+
+        if (!funcionarioId) {
+            throw new AppError('Funcinario not founded', 400)
+        }
+
         const cpfFuncionario = await this.funcionariosRepository.getFuncionarioByCpf(data.cpf)
 
         if (cpfFuncionario) {
