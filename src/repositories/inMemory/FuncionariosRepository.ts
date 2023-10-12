@@ -1,17 +1,18 @@
 import { CreateFuncionarioProps, FuncionarioProps } from "../../@types/Funcionarios";
-import { CreateSessaoProps } from "../../@types/Sessoes";
+import { CreateSessaoProps, SessaoProps } from "../../@types/Sessoes";
 import { FuncionariosRepository } from "../interfaces/funcionarios-interfaces";
 
 export class InMemoryFuncionariosRepository implements FuncionariosRepository {
-    private dbInMemory: FuncionarioProps[] = []
-    private FuncListInMemory: FuncionarioProps[] = [
+    private funcDbInMemory: FuncionarioProps[] = []
+    private funcListInMemory: FuncionarioProps[] = [
         { id: '123', nome: 'first', sobrenome: 'func', cargo: 'GERENTE', cpf: '12345678910', status_func: 1 },
         { id: '321', nome: 'second', sobrenome: 'func', cargo: 'FUNCIONARIO', cpf: '12345678911', status_func: 1 }
     ]
+    private sessaoDbInMemory: SessaoProps[] = []
 
     async createFuncionario(data: CreateFuncionarioProps, sessao: CreateSessaoProps): Promise<FuncionarioProps | null> {
         const funcionario: FuncionarioProps = {
-            id: `${this.dbInMemory.length}`,
+            id: `${this.funcDbInMemory.length}`,
             nome: data.nome,
             sobrenome: data.sobrenome,
             cargo: data.cargo,
@@ -19,13 +20,24 @@ export class InMemoryFuncionariosRepository implements FuncionariosRepository {
             status_func: 1
         }
 
-        this.dbInMemory.push(funcionario)
+        this.funcDbInMemory.push(funcionario)
+
+        const sessaoData: SessaoProps = {
+            id: `${this.sessaoDbInMemory.length}`,
+            id_cliente: null,
+            id_func: funcionario.id,
+            email: sessao.email,
+            senha: sessao.senha,
+            status_sessao: 1
+        }
+
+        this.sessaoDbInMemory.push(sessaoData)
 
         return funcionario
     }
 
     async getFuncionarioById(id: string): Promise<FuncionarioProps | null> {
-        const funcionario = this.dbInMemory.find(func => func.id === id)
+        const funcionario = this.funcDbInMemory.find(func => func.id === id)
 
         if (!funcionario) {
             return null
@@ -35,7 +47,7 @@ export class InMemoryFuncionariosRepository implements FuncionariosRepository {
     }
 
     async getFuncionarioByCpf(cpf: string): Promise<FuncionarioProps | null> {
-        const funcionario = this.dbInMemory.find(func => func.cpf === cpf)
+        const funcionario = this.funcDbInMemory.find(func => func.cpf === cpf)
 
         if (!funcionario) {
             return null
@@ -45,10 +57,10 @@ export class InMemoryFuncionariosRepository implements FuncionariosRepository {
     }
 
     async updateFuncionario(data: FuncionarioProps): Promise<FuncionarioProps | null> {
-        const funcIndex = this.dbInMemory.findIndex(func => func.id === data.id)
+        const funcIndex = this.funcDbInMemory.findIndex(func => func.id === data.id)
 
         const newFunc: FuncionarioProps = {
-            ...this.dbInMemory[funcIndex],
+            ...this.funcDbInMemory[funcIndex],
             nome: data.nome,
             sobrenome: data.sobrenome,
             cargo: data.cargo,
@@ -56,28 +68,28 @@ export class InMemoryFuncionariosRepository implements FuncionariosRepository {
             status_func: data.status_func
         }
 
-        this.dbInMemory[funcIndex] = newFunc
+        this.funcDbInMemory[funcIndex] = newFunc
 
-        return this.dbInMemory[funcIndex]
+        return this.funcDbInMemory[funcIndex]
     }
 
     async deleteFuncionario(id: string): Promise<FuncionarioProps | null> {
-        const funcIndex = this.dbInMemory.findIndex(func => func.id === id)
+        const funcIndex = this.funcDbInMemory.findIndex(func => func.id === id)
 
-        const funcionario = this.dbInMemory[funcIndex]
+        const funcionario = this.funcDbInMemory[funcIndex]
 
         const newFunc: FuncionarioProps = {
             ...funcionario,
             status_func: 0
         }
 
-        this.dbInMemory[funcIndex] = newFunc
+        this.funcDbInMemory[funcIndex] = newFunc
 
-        return this.dbInMemory[funcIndex]
+        return this.funcDbInMemory[funcIndex]
     }
 
     async getAllFuncionarios(): Promise<FuncionarioProps[] | null> {
-        const funcionarios = this.FuncListInMemory
+        const funcionarios = this.funcListInMemory
 
         return funcionarios
     }
