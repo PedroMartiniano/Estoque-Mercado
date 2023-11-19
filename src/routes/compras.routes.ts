@@ -15,7 +15,7 @@ export const comprasRoutes = async (app: FastifyInstance) => {
         await comprasController.getCompraByIdHandler(req, rep)
     })
 
-    app.delete('/cancelar/:id', async (req, rep) => {
+    app.delete('/cancel/:id', async (req, rep) => {
         await comprasController.cancelarCompraHandler(req, rep)
     })
 }

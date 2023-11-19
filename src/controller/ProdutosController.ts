@@ -141,4 +141,18 @@ export class ProdutosController {
             throw new AppError(e.message, e.statusCode)
         }
     }
+
+    async getAllProdutosHandler(req: FastifyRequest, rep: FastifyReply) {
+
+        const produtosService = makeProdutosService()
+
+        try {
+            const produto = await produtosService.getAllProdutos()
+
+            return rep.status(200).send({ success: true, data: produto })
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
+    }
+
 }

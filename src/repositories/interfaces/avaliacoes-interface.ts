@@ -3,4 +3,5 @@ import { AvaliacoesProps, CreateAvaliacaoProps, GetAvaliacaoProps } from "../../
 export interface AvaliacoesRepository {
     createAvaliacao(data: CreateAvaliacaoProps): Promise<AvaliacoesProps | null>
     getAvaliacaoByUserProd(data: GetAvaliacaoProps): Promise<AvaliacoesProps | null>
+    getAvaliacaoByProd(id_produto: string): Promise<AvaliacoesProps[] | null>
 }

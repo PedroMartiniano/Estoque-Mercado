@@ -50,4 +50,17 @@ export class KnexAvaliacoesRepository implements AvaliacoesRepository {
             return null
         }
     }
+
+    async getAvaliacaoByProd(id_produto: string): Promise<AvaliacoesProps[] | null> {
+        try {
+            const avaliacoes: AvaliacoesProps[] = await knex
+                .select()
+                .from('avaliacoes')
+                .where({ id_produto })
+
+            return avaliacoes
+        } catch {
+            return null
+        }
+    }
 }

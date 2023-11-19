@@ -15,22 +15,23 @@ export const produtosRoutes = async (app: FastifyInstance) => {
         await produtosController.getProdutoByIdCatHandler(req, rep)
     })
 
-    app.addHook('onRequest', verifyJwt)
-    app.addHook('onRequest', verifyFunc)
+    app.get('/get-all', async (req, rep) => {
+        await produtosController.getAllProdutosHandler(req, rep)
+    })
 
-    app.post('/create/:id_cat', async (req, rep) => {
+    app.post('/create/:id_cat', { preHandler: [verifyJwt, verifyFunc] }, async (req, rep) => {
         await produtosController.createProdutoHandler(req, rep)
     })
 
-    app.post('/uploadImage/:id', { preHandler: upload.single('product') }, async (req, rep) => {
+    app.put('/uploadImage/:id', { preHandler: [verifyJwt, verifyFunc, upload.single('product')] }, async (req, rep) => {
         await produtosController.uploadImageHandler(req, rep)
     })
 
-    app.post('/entrada/:id', async (req, rep) => {
+    app.post('/entrada/:id', { preHandler: [verifyJwt, verifyFunc] }, async (req, rep) => {
         await produtosController.entradaProdutoHandler(req, rep)
     })
 
-    app.post('/baixa/:id', async (req, rep) => {
+    app.post('/baixa/:id', { preHandler: [verifyJwt, verifyFunc] }, async (req, rep) => {
         await produtosController.baixaProdutoHandler(req, rep)
     })
 }

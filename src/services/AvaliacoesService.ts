@@ -50,4 +50,14 @@ export class AvaliacoesService {
 
         return avaliacao
     }
+
+    async getAvaliacaoByProdExecute(id_produto: string): Promise<AvaliacoesProps[]> {
+        const avaliacoes = await this.avaliacoesRepository.getAvaliacaoByProd(id_produto)
+
+        if (avaliacoes === null) {
+            throw new AppError('Error on getting avaliacoes', 500)
+        }
+
+        return avaliacoes
+    }
 }

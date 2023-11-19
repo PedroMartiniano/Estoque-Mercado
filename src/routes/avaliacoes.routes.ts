@@ -14,4 +14,8 @@ export const avaliacoesRoutes = async (app: FastifyInstance) => {
     app.get('/get/:id_produto', async (req, rep) => {
         await avaliacoesController.getAvaliacaoByUserProdHandler(req, rep)
     })
+
+    app.get('/get-prod/:id_produto', async (req, rep) => {
+        await avaliacoesController.getAvaliacoesByProdHandler(req, rep)
+    })
 }

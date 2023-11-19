@@ -6,5 +6,6 @@ export interface ProdutosRepository {
     entradaProduto(data: modifyProdutoProps): Promise<ProdutosProps | null>
     getProdutoById(id: string): Promise<ProdutosProps | null>
     getProdutoByIdCat(id_cat: string): Promise<ProdutosProps[] | null>
+    getAllProdutos(): Promise<ProdutosProps[] | null>
     baixaProduto(data: modifyProdutoProps): Promise<ProdutosProps | null>
 }

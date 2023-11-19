@@ -64,4 +64,14 @@ export class ProdutosService {
 
         return produto
     }
+
+    async getAllProdutos(): Promise<ProdutosProps[]> {
+        const produtos = await this.produtosRepository.getAllProdutos()
+
+        if (produtos === null) { 
+            throw new AppError(`Error on getting products`, 500)
+        }
+
+        return produtos
+    }
 }

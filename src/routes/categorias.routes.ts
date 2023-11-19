@@ -1,10 +1,12 @@
 import { FastifyInstance } from "fastify";
 import { CategoriasController } from "../controller/CategoriasController";
+import { verifyJwt } from "../middlewares/verifyJwt";
+import { verifyFunc } from "../middlewares/verifyFunc";
 
 export const categoriasRoutes = async (app: FastifyInstance) => {
     const categoriasController = new CategoriasController
 
-    app.post('/create', async (req, rep) => {
+    app.post('/create', { preHandler: [verifyJwt, verifyFunc] }, async (req, rep) => {
         await categoriasController.createCategoriaController(req, rep)
     })
 

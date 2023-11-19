@@ -150,4 +150,16 @@ export class KnexProdutosRepository implements ProdutosRepository {
             return null
         }
     }
+
+    async getAllProdutos(): Promise<ProdutosProps[] | null> {
+        try {
+            const products = await knex
+                .select()
+                .from('produtos')
+
+            return products
+        } catch {
+            return null
+        }
+    }
 }

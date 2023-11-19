@@ -72,4 +72,26 @@ export class AvaliacoesController {
             throw new AppError(e.message, e.statusCode)
         }
     }
+
+    async getAvaliacoesByProdHandler(req: FastifyRequest, rep: FastifyReply) {
+        const idProdSchema = z.object({
+            id_produto: z.string().uuid()
+        })
+
+        const { id_produto } = idProdSchema.parse(req.params)
+
+        const avaliacoesService = makeAvaliacoesService()
+
+        try {
+            const avaliacoes = await avaliacoesService.getAvaliacaoByProdExecute(id_produto)
+
+            if (!avaliacoes[0]) {
+                return rep.status(400).send({ success: false, message: 'None avaliacoes founded!' })
+            }
+
+            return rep.status(200).send({ success: true, data: avaliacoes })
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
+    }
 }

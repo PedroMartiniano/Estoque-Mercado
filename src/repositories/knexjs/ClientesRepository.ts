@@ -16,30 +16,32 @@ export class KnexClientesRepository implements ClientesRepository {
             const hashPassword = await hash(senha, 4)
 
             const res: ClientesProps = await knex.transaction(async (trx) => {
-                await trx
-                    .insert({
-                        id: id_cliente,
-                        nome,
-                        sobrenome,
-                        cpf
-                    })
-                    .into('clientes')
+                const [, , cliente] = await Promise.all([
+                    trx
+                        .insert({
+                            id: id_cliente,
+                            nome,
+                            sobrenome,
+                            cpf
+                        })
+                        .into('clientes'),
 
-                await trx
-                    .insert({
-                        id: id_sessao,
-                        id_cliente,
-                        email,
-                        senha: hashPassword
-                    })
-                    .into('sessoes')
+                    trx
+                        .insert({
+                            id: id_sessao,
+                            id_cliente,
+                            email,
+                            senha: hashPassword
+                        })
+                        .into('sessoes'),
+                        
+                    trx
+                        .select()
+                        .from('clientes')
+                        .where({ id: id_cliente })
+                ])
 
-                const cliente: ClientesProps[] = await trx
-                    .select()
-                    .from('clientes')
-                    .where({ id: id_cliente })
-
-                return cliente[0]
+                return cliente[0] as ClientesProps
             })
 
             return res
