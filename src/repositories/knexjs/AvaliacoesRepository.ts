@@ -1,6 +1,6 @@
 import { v4 as uuid } from "uuid";
 import knex from "../../../database";
-import { CreateAvaliacaoProps, AvaliacoesProps, GetAvaliacaoProps } from "../../@types/Avaliacoes";
+import { CreateAvaliacaoProps, AvaliacoesProps, GetAvaliacaoProps, updateAvaliacaoProps } from "../../@types/Avaliacoes";
 import { AvaliacoesRepository } from "../interfaces/avaliacoes-interface";
 
 export class KnexAvaliacoesRepository implements AvaliacoesRepository {
@@ -59,6 +59,33 @@ export class KnexAvaliacoesRepository implements AvaliacoesRepository {
                 .where({ id_produto })
 
             return avaliacoes
+        } catch {
+            return null
+        }
+    }
+
+    async editAvaliacao(data: updateAvaliacaoProps, id: string): Promise<AvaliacoesProps | null> {
+        try {
+            const { nota, menssagem, verifica_msg } = data
+            const avaliacao: AvaliacoesProps = await knex.transaction(async (trx) => {
+                await trx
+                    .update({
+                        nota,
+                        menssagem,
+                        verifica_msg
+                    })
+                    .from('avaliacoes')
+                    .where({ id })
+
+                const updatedAvaliacao: AvaliacoesProps[] = await trx
+                    .select()
+                    .from('avaliacoes')
+                    .where({ id })
+
+                return updatedAvaliacao[0]
+            })
+
+            return avaliacao
         } catch {
             return null
         }

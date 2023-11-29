@@ -36,12 +36,10 @@ export class AvaliacoesController {
 
         const avaliacoesService = makeAvaliacoesService()
 
-        let verifica_msg = null
-
         try {
-            const avaliacao = await avaliacoesService.createAvaliacaoExecute({ id_cliente, id_produto, nota, menssagem, verifica_msg })
+            const avaliacao = await avaliacoesService.createAvaliacaoExecute({ id_cliente, id_produto, nota, menssagem, verifica_msg: null })
 
-            return rep.status(200).send({ success: true, data: avaliacao })
+            return rep.status(201).send({ success: true, data: avaliacao })
         } catch (e: any) {
             throw new AppError(e.message, e.statusCode)
         }
@@ -90,6 +88,35 @@ export class AvaliacoesController {
             }
 
             return rep.status(200).send({ success: true, data: avaliacoes })
+        } catch (e: any) {
+            throw new AppError(e.message, e.statusCode)
+        }
+    }
+
+    async updateUserAvaliacaoHandler(req: FastifyRequest, rep: FastifyReply) {
+        const idProdSchema = z.object({
+            id_produto: z.string().uuid()
+        })
+
+        const avaliacaoSchema = z.object({
+            nota: z.number().refine(value => value >= 0 && value <= 5, { message: 'Nota not valid.' }),
+            menssagem: z.string()
+        })
+
+        const idClienteSchema = z.object({
+            id_cliente: z.string().uuid()
+        })
+
+        const { id_produto } = idProdSchema.parse(req.params)
+        const { nota, menssagem } = avaliacaoSchema.parse(req.body)
+        const { id_cliente } = idClienteSchema.parse(req.user)
+
+        const avaliacoesService = makeAvaliacoesService()
+
+        try {
+            const avaliacao = await avaliacoesService.updateAvaliacaoExecute({ id_cliente, id_produto, nota, menssagem, verifica_msg: null })
+
+            return rep.status(201).send({ success: true, data: avaliacao })
         } catch (e: any) {
             throw new AppError(e.message, e.statusCode)
         }
